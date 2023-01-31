@@ -138,7 +138,7 @@ x_train_pca = pca.fit_transform(x_train_scaled)
 #
 # %%
 # Perform anomaly detection training using One-class SVM
-ocsvm = OneClassSVM(kernel='rbf', gamma=0.01, nu=0.1)
+ocsvm = OneClassSVM(kernel='rbf', gamma=0.01, nu=0.5)
 ocsvm.fit(x_train_pca)
 
 # %%
@@ -161,7 +161,7 @@ print('Show distribtution of anomaly values:', y_convert)
 
 #%%[markdown]
 ## Prediction results of Anomaly detection.
-# Below is the classification report and confusion matrix of the anomaly detection. The model overall performed at 85% accuracy. What is clear is that the model has a higher false positive rate than false negative rate given that it is less precise, predicting more anomolous samples (-1) as non-anomolous (1). Nonetheless, this is an example and we will continue to step 2 which is now the multi-classification conversion.
+# Below is the classification report and confusion matrix of the anomaly detection. The model overall performed at 85% accuracy. What is clear is that the model has a lower false positive rate than false negative; predicting more non-anomolous (1) than anomolous samples (-1). However, in this scenario it would be more preferred to have a higher false negative rate than false positive rate as this could be used as a rapid screening tool for decision factors in more complex analytical instrumentation. Nonetheless, this is an example and we will continue to step 2 which is now the multi-classification conversion.
 #
 # %%
 # Show classification report
@@ -195,7 +195,7 @@ y_pred = SM.predict(x_anom_pca)
 
 #%%[markdown]
 ## Interpreting multiclassification prediction.
-# Now that the modeling and prediction is done. See below for results. Overall, the modeling performed at below 70% accuracy. The reason for this is that the model was not trained for lemon data which should have been filtered during the anomaly detection step. This should demonstrate the importance of using an anomaly detection approach to identify unknowns in a system that our model is not trained for. Though the predictive accuracy is poor, this is an example dataset using different fruits and the modeling parameters were not tuned. If effort were to be placed for tuning parameters, filtering out nanosenosrs, etc. then the accuracy might be able to be improved. 
+# Now that the modeling and prediction is done. See below for results. Overall, the modeling performed at above 70% accuracy. The reason for this is that the model was not trained for lemon data which should have been filtered during the anomaly detection step. This should demonstrate the importance of using an anomaly detection approach to identify unknowns in a system that our model is not trained for. Though the predictive accuracy is poor, this is an example dataset using different fruits and the modeling parameters were not tuned. If effort were to be placed for tuning parameters, filtering out nanosenosrs, etc. then the accuracy might be able to be improved. 
 # %%
 #Providing classification metrics
 print(classification_report(np.array(y_anom), np.array(y_pred)))
